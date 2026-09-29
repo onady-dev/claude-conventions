@@ -1,0 +1,7 @@
+{
+  // 테스트용 설정: layers는 기본값을 쓴다
+  "externals": { "stripe": ["src/modules/payments/stripe-payment.adapter.ts"] },
+  "baseline": [
+    { "rule": "CA-CTRL-02", "file": "src/modules/orders/bad-orders.controller.ts", "reason": "테스트용 기존 위반" }
+  ]
+}

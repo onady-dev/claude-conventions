@@ -1,0 +1,39 @@
+{
+  // 프로젝트의 .claude/arch.json으로 복사해 쓴다. 파일이 없으면 이 내용과 같은 기본값으로 동작한다.
+  // 기본값과 다른 항목만 남기고 나머지는 지워도 된다.
+
+  // 분석할 소스 루트와 기능 모듈 폴더(모듈 이름 = 이 폴더 바로 아래 폴더 이름)
+  "root": "src",
+  "modulesDir": "src/modules",
+
+  // 분석에서 뺄 파일
+  // 이 항목을 쓰면 기본값을 통째로 대체한다. spec 파일 제외를 유지하려면 기본값을 함께 적는다
+  "exclude": ["**/*.spec.ts", "**/*.test.ts", "**/*.d.ts"],
+
+  // 파일 → 계층. 위에서부터 처음 맞는 규칙을 적용한다. 이 항목을 쓰면 기본 layers를 통째로 대체한다
+  "layers": [
+    { "layer": "framework", "match": ["**/main.ts", "**/*.module.ts"] },
+    { "layer": "entity", "match": ["**/*.entity.ts"] },
+    {
+      "layer": "adapter",
+      "match": [
+        "**/*.controller.ts", "**/*.guard.ts", "**/*.strategy.ts", "**/*.middleware.ts", "**/*.filter.ts",
+        "**/*.interceptor.ts", "**/*.adapter.ts", "**/*.client.ts", "**/*.repository.ts"
+      ]
+    },
+    { "layer": "usecase", "match": ["**/*.service.ts", "**/*.scheduler.ts", "**/*.port.ts", "**/*.dto.ts", "**/dto/**"] },
+    { "layer": "domain", "match": ["**/*.policy.ts", "**/*.domain.ts", "**/domain/**"] }
+  ],
+
+  // 외부 SDK 패키지 → import를 허용할 어댑터 파일 (CA-EXT-01). 예: "stripe": ["src/modules/payments/stripe-payment.adapter.ts"]
+  "externals": {},
+
+  // 도메인에서 import를 허용할 순수 패키지 (CA-PURE-01 예외)
+  "domainAllowedPackages": [],
+
+  // 이미 알고 있는 위반. 없애지 않고 '기존 위반'으로 분리만 한다. 예: { "rule": "CA-CTRL-02", "file": "src/a.controller.ts", "count": 1, "reason": "..." }
+  // count를 주면 그 파일의 같은 규칙 위반을 줄 번호순으로 count개까지만 기존 위반으로 본다. 생략하면 파일 전체
+  "baseline": [],
+
+  "limits": { "controllerHandlerMaxLines": 15, "largeServiceLines": 500, "contextPackMaxBytes": 20000 }
+}
